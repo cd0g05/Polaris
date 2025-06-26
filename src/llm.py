@@ -81,7 +81,7 @@ class OpenaiAiService(AiService):
         return response.choices[0].message.content
 
     def disagree(self, um, pm1, pm2) -> str:
-        prompt = f"""Calmly but confidently disagree with the most recent statement, no matter what it says. Concisely make it clear that they are wrong.
+        prompt = f"""You are a witnessing a conversation between other people. Calmly but confidently butt in and disagree with the most recent statement, no matter what it says. Concisely make it clear that they are wrong.
         Here is the context:
         1. {pm2.author}: "{pm2.content}"
         2. {pm1.author}: "{pm1.content}"
