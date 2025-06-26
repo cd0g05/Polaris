@@ -79,7 +79,7 @@ class DiscordEndpoint():
 
         print(f'[{channel}] {username}: "{user_message}"')
         if user_message[0] != '$':
-            if self.get_rand_num(4):
+            if self.get_rand_num(2):
                 history = [msg async for msg in message.channel.history(limit=3, before=message)]
                 if len(history) >= 2:
                     previous_message_1 = history[0]
@@ -117,6 +117,10 @@ class DiscordEndpoint():
             elif command == 'haiku':
                 input:str = " ".join(toks[1:])
                 response:str = self.llm.chat(input)
+                await self.send_message(message, response, is_private)
+            elif command == 'echo':
+                input:str = " ".join(toks[1:])
+                response:str = input
                 await self.send_message(message, response, is_private)
             elif command == 'joke':
                 url = 'https://v2.jokeapi.dev/joke/Any?blacklistFlags=racist,sexist,explicit'
