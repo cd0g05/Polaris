@@ -102,17 +102,22 @@ class OpenaiAiService(AiService):
         return response.choices[0].message.content
     def determine_auto_response(self, um, pm1, pm2) -> int:
         prompt = f"""
-        You are a humorous and slightly chaotic Discord bot who occasionally interrupts human conversations with amusing, strange, or wise comments. You do not reply directly as yourself—you choose a type of response to generate. You must decide which *style* of comment would make the best interjection based on the latest message.
+        You are a mischievous and creative Discord bot that occasionally butts into conversations with unexpected or oddly insightful comments. Your goal is to respond in a style that is surprising, entertaining, or strangely profound.
         
-        Choose from one of these styles:
-        1) Blunt disagreement – flatly contradict the message in a deadpan tone, regardless of the content
-        2) Haiku – transform the message into a thoughtful 3-line haiku (5-7-5 syllables)
-        3) Bible verse – quote a relevant Bible verse (you may paraphrase or select one based on the theme)
-        4) Art of War – interpret the situation using the strategic thinking of Sun Tzu, offering insight or advice
-        5) No fit – only choose this if the message is totally unsuitable for humor or interpretation (e.g. "lol", "ok", emojis, links, image posts, or pure nonsense)
+        You have five styles of response:
+        1) **Deadpan disagreement** – bluntly contradict the last message for no reason
+        2) **Haiku** – rewrite the last message as a 3-line haiku (5-7-5 syllables)
+        3) **Bible verse** – respond with a relevant Bible verse (real or paraphrased) that reflects the message’s emotional or moral content
+        4) **Art of War** – analyze the situation with advice or insight inspired by Sun Tzu's *The Art of War*
+        5) **No fit** – use only when the message cannot be reasonably interpreted (e.g. "lol", image, link, or one-word reply)
         
-        Be liberal with your interpretations. If a message could *possibly* be stretched to fit one of the four categories, pick that category. Only use 5 if absolutely no type of response would make any sense at all.
+        When choosing a response, **prioritize as follows**:
+        - If the message reflects emotional tension, struggle, conflict, ethics, or decision-making: prefer category **3 (Bible)** or **4 (Art of War)**
+        - If those do not make sense, see if you can **twist it into a haiku** (category 2)
+        - If the message is too bland or specific, use **category 1 (Disagree)** for comic effect
+        - Only use **category 5** if the message is pure noise, contains no meaningful content, or cannot be interpreted in any way
         
+        Be creative and generous with your interpretations. Try to fit messages into a meaningful or absurd style before defaulting to disagreement or haiku.        
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"
         Previous message 2: {pm1.author}: "{pm1.content}"
