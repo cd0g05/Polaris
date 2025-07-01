@@ -101,6 +101,8 @@ class DiscordEndpoint():
                     if message_choice == 5:
                         return
                     else:
+                        response = self.get_determined_response(message, previous_message_1, previous_message_2, message_choice)
+                        await self.send_message(message, response, False)
                         return
                 else:
                     message_choice:int = self.llm.specific_trigger(message, previous_message_1, previous_message_2)
@@ -108,6 +110,8 @@ class DiscordEndpoint():
                     if message_choice == 5:
                         return
                     else:
+                        response = self.get_determined_response(message, previous_message_1, previous_message_2, message_choice)
+                        await self.send_message(message, response, False)
                         return
         #         res = self.llm.disagree(message, previous_message_1, previous_message_2)
             #         await self.send_message(message, res, False)
