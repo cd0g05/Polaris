@@ -253,7 +253,7 @@ class OpenaiAiService(AiService):
         Previous message 2: {pm1.author}: "{pm1.content}"
         Most recent message: {um.author}: "{um.content}"
         
-        Respond with a short piece of Sun Tzu-style wisdom that applies to the most recent message.
+        Respond with a short piece of Sun Tzu-style wisdom that applies to the most recent message, no more than 80 words.
         """
 
         response = client.chat.completions.create(
