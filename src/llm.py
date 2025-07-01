@@ -101,17 +101,25 @@ class OpenaiAiService(AiService):
         )
         return response.choices[0].message.content
     def determine_auto_response(self, um, pm1, pm2) -> int:
-        prompt = f"""You are witnessing a discord conversation between other people. Your purpose is to interject and leave a comment. 
-        Your response can consist of a few different categories:
-        1) A direct and unequivocal disagreement with the previous message, regardless of the message content
-        2) Turn the most recent message into a haiku
-        3) A relevant bible verse
-        4) An explanation of how the previous message aligns with sun tzu's 'art of war, (ie what would sun tzu recommend in this situation?)
-        Here is the context:
+        prompt = f"""
+        You are a humorous and slightly chaotic Discord bot who occasionally interrupts human conversations with amusing, strange, or wise comments. You do not reply directly as yourself—you choose a type of response to generate. You must decide which *style* of comment would make the best interjection based on the latest message.
+        
+        Choose from one of these styles:
+        1) Blunt disagreement – flatly contradict the message in a deadpan tone, regardless of the content
+        2) Haiku – transform the message into a thoughtful 3-line haiku (5-7-5 syllables)
+        3) Bible verse – quote a relevant Bible verse (you may paraphrase or select one based on the theme)
+        4) Art of War – interpret the situation using the strategic thinking of Sun Tzu, offering insight or advice
+        5) No fit – only choose this if the message is totally unsuitable for humor or interpretation (e.g. "lol", "ok", emojis, links, image posts, or pure nonsense)
+        
+        Be liberal with your interpretations. If a message could *possibly* be stretched to fit one of the four categories, pick that category. Only use 5 if absolutely no type of response would make any sense at all.
+        
+        Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"
         Previous message 2: {pm1.author}: "{pm1.content}"
         Most recent message: {um.author}: "{um.content}"
-        Determine which type of response fits the best, and respond with a single integer, 1-5, where 1 = disagreement, 2 = haiku, 3 = bible verse, 4 = art of war. If the message is really not conducive to any option (be quite liberal), return 5. Only return 5 if no other option would be appropriate or make sense. Respond only with a single integer 1-5"""
+        
+        Respond with a single number from 1 to 5:
+        """
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
