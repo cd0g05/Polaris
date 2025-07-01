@@ -95,7 +95,7 @@ class DiscordEndpoint():
             if len(history) >= 2:
                 previous_message_1 = history[0]
                 previous_message_2 = history[1]
-                if self.get_rand_num(4):
+                if self.get_rand_num(6):
                     message_choice:int = self.llm.determine_auto_response(message, previous_message_1, previous_message_2)
                     print(f"General: {message_choice}")
                     if message_choice == 5:
