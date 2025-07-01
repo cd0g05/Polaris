@@ -108,9 +108,9 @@ class OpenaiAiService(AiService):
         3) A relevant bible verse
         4) An explanation of how the previous message aligns with sun tzu's 'art of war'
         Here is the context:
-        1. {pm2.author}: "{pm2.content}"
-        2. {pm1.author}: "{pm1.content}"
-        3. {um.author}: "{um.content}"
+        Previous message 1: {pm2.author}: "{pm2.content}"
+        Previous message 2: {pm1.author}: "{pm1.content}"
+        Most recent message: {um.author}: "{um.content}"
         Determine which type of response fits the best, and respond with a single integer, 1-5, where 1 = disagreement, 2 = haiku, 3 = bible verse, 4 = art of war, and if the message is not conducive to any option return 5. Respond only with a single integer 1-5"""
         response = client.chat.completions.create(
             model="gpt-4o-mini",
