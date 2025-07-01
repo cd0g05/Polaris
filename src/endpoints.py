@@ -6,7 +6,6 @@ import random
 import discord
 import requests
 from discord import Intents, Client, Message
-
 from src.data_retriever import StockPriceRetriever
 from src.llm import AiService
 # from src.messager import send_message
@@ -79,15 +78,18 @@ class DiscordEndpoint():
 
         print(f'[{channel}] {username}: "{user_message}"')
         if user_message[0] != '$':
-            if self.get_rand_num(8):
-                history = [msg async for msg in message.channel.history(limit=3, before=message)]
-                if len(history) >= 2:
-                    previous_message_1 = history[0]
-                    previous_message_2 = history[1]
-                    res = self.llm.disagree(message, previous_message_1, previous_message_2)
-                    await self.send_message(message, res, False)
-                else:
-                    await self.send_message(message, "Some error happened, contact carter", False)
+            # if self.get_rand_num(8):
+            history = [msg async for msg in message.channel.history(limit=3, before=message)]
+            if len(history) >= 2:
+                previous_message_1 = history[0]
+                previous_message_2 = history[1]
+                message_choice:int = self.llm.disagree(message, previous_message_1, previous_message_2)
+                print(message_choice)
+                return
+        #         res = self.llm.disagree(message, previous_message_1, previous_message_2)
+            #         await self.send_message(message, res, False)
+            #     else:
+            #         await self.send_message(message, "Some error happened, contact carter", False)
             else:
                 return
         # and user_message[0] != 'Wordle'

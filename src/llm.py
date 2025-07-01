@@ -36,6 +36,10 @@ class AiService(metaclass=ABCMeta):
     def disagree(self, um, pm1, pm2):
         pass
 
+    @abstractmethod
+    def determine_auto_response(self, um, pm1, pm2):
+        pass
+
 class StubAiService(AiService):
 
     def get_summary(self, results: str) -> str:
@@ -81,7 +85,7 @@ class OpenaiAiService(AiService):
         return response.choices[0].message.content
 
     def disagree(self, um, pm1, pm2) -> str:
-        prompt = f"""You are a witnessing a conversation between other people. Calmly but confidently butt in and disagree with the most recent statement, no matter what it says. Concisely make it clear that they are wrong.
+        prompt = f"""You are a witnessing a conversation between other people. Calmly but confidently butt in and declare that the most recent statement is false, no matter what it says. Concisely make it clear that they are wrong.
         Here is the context:
         1. {pm2.author}: "{pm2.content}"
         2. {pm1.author}: "{pm1.content}"
@@ -96,6 +100,28 @@ class OpenaiAiService(AiService):
             ]
         )
         return response.choices[0].message.content
+    def determine_auto_response(self, um, pm1, pm2) -> int:
+        prompt = f"""You are witnessing a discord conversation between other people. Your purpose is to interject and leave a comment. 
+        Your comment can consist of a few different categories:
+        1) A direct and unequivocal disagreement with the previous message, regardless of the message content
+        2) A haiku incorporating the previous message
+        3) A relevant bible verse
+        4) An explanation of how the previous message aligns with sun tzu's 'art of war'
+        Here is the context:
+        1. {pm2.author}: "{pm2.content}"
+        2. {pm1.author}: "{pm1.content}"
+        3. {um.author}: "{um.content}"
+        Determine which type of response fits the best, and respond with a single integer, 1-5, where 1 = disagreement, 2 = haiku, 3 = bible verse, 4 = art of war, and if the message is not conducive to any option return 5. Respond only with a single integer 1-5"""
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        int_res: int = int(response.choices[0].message.content)
+        return int_res
 class Api:
 
 
