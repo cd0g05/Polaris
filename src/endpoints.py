@@ -78,15 +78,24 @@ class DiscordEndpoint():
 
         print(f'[{channel}] {username}: "{user_message}"')
         if user_message[0] != '$':
-            # if self.get_rand_num(8):
             history = [msg async for msg in message.channel.history(limit=3, before=message)]
             if len(history) >= 2:
                 previous_message_1 = history[0]
                 previous_message_2 = history[1]
-                specific:int = self.llm.specific_trigger(message, previous_message_1, previous_message_2)
-                message_choice:int = self.llm.determine_auto_response(message, previous_message_1, previous_message_2)
-                print(f"General: {message_choice}\nSpecific: {specific}")
-                return
+                if self.get_rand_num(4):
+                    message_choice:int = self.llm.determine_auto_response(message, previous_message_1, previous_message_2)
+                    print(f"General: {message_choice}")
+                    if message_choice == 5:
+                        return
+                    else:
+                        return
+                else:
+                    message_choice:int = self.llm.specific_trigger(message, previous_message_1, previous_message_2)
+                    print(f"Specific: {message_choice}")
+                    if message_choice == 5:
+                        return
+                    else:
+                        return
         #         res = self.llm.disagree(message, previous_message_1, previous_message_2)
             #         await self.send_message(message, res, False)
             #     else:
