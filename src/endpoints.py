@@ -35,6 +35,19 @@ class DiscordEndpoint():
         self.llm: AiService = llm
         self.client.run(token=os.getenv('TOKEN'))
 
+    def get_determined_response(self, um, pm1, pm2, num:int) -> str:
+        if num == 1:
+            res = self.llm.disagree(um, pm1, pm2)
+            return res
+        elif num == 2:
+            res = self.llm.make_haiku(um, pm1, pm2)
+            return res
+        elif num == 3:
+            res = self.llm.get_bible(um, pm1, pm2)
+            return res
+        elif num == 4:
+            res = self.llm.get_tzu(um, pm1, pm2)
+            return res
 
     def get_response(user_input: str) -> str:
         lowered: str = user_input.lower()

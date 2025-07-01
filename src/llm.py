@@ -43,6 +43,18 @@ class AiService(metaclass=ABCMeta):
     def specific_trigger(self, um, pm1, pm2):
         pass
 
+    @abstractmethod
+    def make_haiku(self, um, pm1, pm2):
+        pass
+
+    @abstractmethod
+    def get_bible(self, um, pm1, pm2):
+        pass
+
+    @abstractmethod
+    def get_tzu(self, um, pm1, pm2):
+        pass
+
 class StubAiService(AiService):
 
     def get_summary(self, results: str) -> str:
@@ -111,10 +123,10 @@ class OpenaiAiService(AiService):
         1) Deadpan disagreement – bluntly contradict the last message for no reason
         2) Haiku – rewrite the last message as a 3-line haiku (5-7-5 syllables)
         3) Bible verse – respond with a relevant Bible verse (real or paraphrased) that reflects the message’s emotional or moral content when the message includes any of the following:
-   - Emotional struggle, guilt, forgiveness, despair, or hope
-   - Moral or ethical tension
-   - References to biblical themes (temptation, betrayal, sacrifice, miracles, plagues, judgment, exile, resurrection, etc.)
-   - Indirect or humorous connections to biblical stories (e.g. “I haven’t eaten in 40 days” → fasting, or “he ghosted me for 3 days” → resurrection)
+       - Emotional struggle, guilt, forgiveness, despair, or hope
+       - Moral or ethical tension
+       - References to biblical themes (temptation, betrayal, sacrifice, miracles, plagues, judgment, exile, resurrection, etc.)
+       - Indirect or humorous connections to biblical stories (e.g. “I haven’t eaten in 40 days” → fasting, or “he ghosted me for 3 days” → resurrection)
         4) Art of War – analyze the situation with advice or insight inspired by Sun Tzu's *The Art of War*
         5) No fit – use only when the message cannot be reasonably interpreted (e.g. "lol", image, link, or one-word reply)
         
@@ -150,10 +162,10 @@ class OpenaiAiService(AiService):
         1) Blunt disagreement – the message makes a bold or confident claim, and you'd enjoy contradicting it for comedic effect
         2) Haiku – the message has poetic potential, vivid imagery, or emotional weight that can be turned into a 3-line haiku (5-7-5 syllables)
         3) Bible verse – the message includes any of the following:
-   - Emotional struggle, guilt, forgiveness, despair, or hope
-   - Moral or ethical tension
-   - References to biblical themes (temptation, betrayal, sacrifice, miracles, plagues, judgment, exile, resurrection, etc.)
-   - Indirect or humorous connections to biblical stories (e.g. “I haven’t eaten in 40 days” → fasting, or “he ghosted me for 3 days” → resurrection)
+       - Emotional struggle, guilt, forgiveness, despair, or hope
+       - Moral or ethical tension
+       - References to biblical themes (temptation, betrayal, sacrifice, miracles, plagues, judgment, exile, resurrection, etc.)
+       - Indirect or humorous connections to biblical stories (e.g. “I haven’t eaten in 40 days” → fasting, or “he ghosted me for 3 days” → resurrection)
         4) Art of War – the message contains conflict, tension, strategy, or social dynamics that can be interpreted through Sun Tzu's teachings
         
         Do not respond unless one of these styles clearly applies. If the message is neutral, unremarkable, or doesn’t evoke any of the above responses, return 5 (do not respond).
@@ -182,6 +194,78 @@ class OpenaiAiService(AiService):
         )
         int_res: int = int(response.choices[0].message.content)
         return int_res
+
+    def make_haiku(self, um, pm1, pm2) -> str:
+        prompt = f"""
+        You are a poetic Discord bot that turns everyday messages into haikus. Use imagery and emotional tone from the message. The result should feel thoughtful or beautiful—even if the original message was mundane.
+        
+        Here is the conversation context:
+        Previous message 1: {pm2.author}: "{pm2.content}"
+        Previous message 2: {pm1.author}: "{pm1.content}"
+        Most recent message: {um.author}: "{um.content}"
+        
+        Turn the most recent message into a haiku.
+        """
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        return response.choices[0].message.content
+    def get_bible(self, um, pm1, pm2) -> str:
+        prompt = f"""
+        You are a bot that responds to messages with a Bible verse that is most relevant to the content or emotion of the message.
+        
+        You must choose a verse that reflects the theme, situation, or feeling in the most recent message. Be as accurate and relevant as possible, based on meaning and tone.
+        
+        Only respond with the text of a single Bible verse. Include the book, chapter, and verse.
+        
+        Here is the conversation context:
+        Previous message 1: {pm2.author}: "{pm2.content}"
+        Previous message 2: {pm1.author}: "{pm1.content}"
+        Most recent message: {um.author}: "{um.content}"
+        
+        Respond with the most fitting Bible verse.
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        return response.choices[0].message.content
+    def get_tzu(self, um, pm1, pm2) -> str:
+        prompt = f"""
+        You are a philosophical Discord bot channeling the strategic wisdom of Sun Tzu's *The Art of War*. You interpret situations as if they are battles to be won with intelligence, timing, and subtlety.
+        
+        The goal is to respond to the latest message with insight based on Sun Tzu’s ideas: indirect action, discipline, timing, deception, control of terrain, understanding the enemy, etc.
+        
+        You may quote or paraphrase *The Art of War*, or apply its logic to the situation. Your tone should be calm, serious, and wise.
+        
+        Here is the conversation context:
+        Previous message 1: {pm2.author}: "{pm2.content}"
+        Previous message 2: {pm1.author}: "{pm1.content}"
+        Most recent message: {um.author}: "{um.content}"
+        
+        Respond with a short piece of Sun Tzu-style wisdom that applies to the most recent message.
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        return response.choices[0].message.content
+
 class Api:
 
 
