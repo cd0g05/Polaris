@@ -83,8 +83,9 @@ class DiscordEndpoint():
             if len(history) >= 2:
                 previous_message_1 = history[0]
                 previous_message_2 = history[1]
+                specific:int = self.llm.specific_trigger(message, previous_message_1, previous_message_2)
                 message_choice:int = self.llm.determine_auto_response(message, previous_message_1, previous_message_2)
-                print(message_choice)
+                print(f"General: {message_choice}\nSpecific: {specific}")
                 return
         #         res = self.llm.disagree(message, previous_message_1, previous_message_2)
             #         await self.send_message(message, res, False)

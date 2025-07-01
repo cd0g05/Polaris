@@ -39,6 +39,9 @@ class AiService(metaclass=ABCMeta):
     @abstractmethod
     def determine_auto_response(self, um, pm1, pm2):
         pass
+    @abstractmethod
+    def specific_trigger(self, um, pm1, pm2):
+        pass
 
 class StubAiService(AiService):
 
@@ -124,6 +127,42 @@ class OpenaiAiService(AiService):
         Most recent message: {um.author}: "{um.content}"
         
         Respond with a single number from 1 to 5:
+        """
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        int_res: int = int(response.choices[0].message.content)
+        return int_res
+    def specific_trigger(self, um, pm1, pm2) -> int:
+        prompt = f"""
+        You are an observer of a Discord conversation. You are normally quiet, but when a message stands out as particularly poetic, emotional, dramatic, wise, or absurd, you may choose to interject with one of your signature styles.
+        
+        You have four specific styles of response:
+        1) **Blunt disagreement** – the message makes a bold or confident claim, and you'd enjoy contradicting it for comedic effect
+        2) **Haiku** – the message has poetic potential, vivid imagery, or emotional weight that can be turned into a 3-line haiku (5-7-5 syllables)
+        3) **Bible verse** – the message reflects personal struggle, morality, hope, or fear, and would pair well with a verse from scripture
+        4) **Art of War** – the message contains conflict, tension, strategy, or social dynamics that can be interpreted through Sun Tzu's teachings
+        
+        Do not respond unless **one of these styles clearly applies**. If the message is neutral, unremarkable, or doesn’t evoke any of the above responses, return **5 (do not respond)**.
+        
+        Be thoughtful and selective. Only respond when the message strongly fits one of the styles above.
+        
+        Here is the conversation context:
+        Previous message 1: {pm2.author}: "{pm2.content}"
+        Previous message 2: {pm1.author}: "{pm1.content}"
+        Most recent message: {um.author}: "{um.content}"
+        
+        Respond with a single number:
+        1 = blunt disagreement  
+        2 = haiku  
+        3 = bible verse  
+        4 = art of war  
+        5 = do not respond
         """
         response = client.chat.completions.create(
             model="gpt-4o-mini",
