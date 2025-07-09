@@ -48,6 +48,18 @@ class DiscordEndpoint():
         elif num == 4:
             res = self.llm.get_tzu(um, pm1, pm2)
             return res
+        elif num == 5:
+            res = self.llm.get_explanation(um, pm1, pm2)
+            return res
+        elif num == 6:
+            res = self.llm.get_corporate(um, pm1, pm2)
+            return res
+        elif num == 7:
+            res = self.llm.get_shakespeare(um, pm1, pm2)
+            return res
+        elif num == 8:
+            res = self.llm.get_overreact(um, pm1, pm2)
+            return res
 
     def get_response(user_input: str) -> str:
         lowered: str = user_input.lower()

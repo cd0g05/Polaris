@@ -55,6 +55,22 @@ class AiService(metaclass=ABCMeta):
     def get_tzu(self, um, pm1, pm2):
         pass
 
+    @abstractmethod
+    def get_explanation(self, um, pm1, pm2):
+        pass
+
+    @abstractmethod
+    def get_corporate(self, um, pm1, pm2):
+        pass
+
+    @abstractmethod
+    def get_shakespeare(self, um, pm1, pm2):
+        pass
+
+    @abstractmethod
+    def get_overreact(self, um, pm1, pm2):
+        pass
+
 class StubAiService(AiService):
 
     def get_summary(self, results: str) -> str:
@@ -128,21 +144,37 @@ class OpenaiAiService(AiService):
        - References to biblical themes (temptation, betrayal, sacrifice, miracles, plagues, judgment, exile, resurrection, etc.)
        - Indirect or humorous connections to biblical stories (e.g. “I haven’t eaten in 40 days” → fasting, or “he ghosted me for 3 days” → resurrection)
         4) Art of War – analyze the situation with advice or insight inspired by Sun Tzu's *The Art of War*
-        5) No fit – use only when the message cannot be reasonably interpreted (e.g. "lol", image, link, or one-word reply)
+        5) Translate to Corporate Speak 
+    - The message is casual or everyday (e.g. sleeping, eating, doing chores).  
+    - You can turn it into stiff, professional jargon.  
+    - Example: "I’m gonna make a sandwich" → "Initiating resource acquisition protocol for carbohydrate units."
+        6)  Poorly Explain the Message  
+    - The message involves something technical, serious, or niche.  
+    - You can humorously misunderstand or oversimplify it.  
+    - Example: "I’m configuring a local server" → "So you’re yelling at your toaster until it obeys?"
+        7) 3) **Make it Shakespearean**  
+    - The message has emotion (love, betrayal, conflict, drama).  
+    - You can rewrite it like a line from a Shakespeare play.  
+    - Example: "She blocked me again" → "Thy visage banished from her scroll once more—truly, mine heart is undone."
+        8) 4) **Overreact Dramatically**  
+    - The message is extremely mundane, but can be exaggerated for comic effect.  
+    - Example: "We’re out of dish soap" → "We live in an age of despair."
+        9) No fit – use only when the message cannot be reasonably interpreted (e.g. "lol", image, link, or one-word reply)
         
         When choosing a response, prioritize as follows:
         - If the message reflects emotional tension, struggle, conflict, ethics, or decision-making: prefer category 3 (Bible) or 4 (Art of War)
-        - If those do not make sense, see if you can twist it into a haiku (category 2)
+        - If the situation seems fitting for proper comedic affect, use category 6 or 8
+        - If those do not make sense, see if you can twist it into a haiku, shakespeare, or corporate speak
         - If the message is too bland or specific, use category 1 (Disagree) for comic effect
-        - Only use category 5 if the message is pure noise, contains no meaningful content, or cannot be interpreted in any way
+        - Only use category 9 if the message is pure noise, contains no meaningful content, or cannot be interpreted in any way
         
-        Be creative and generous with your interpretations. Try to fit messages into a meaningful or absurd style before defaulting to disagreement or haiku.        
+        Be creative and generous with your interpretations. Try to fit messages into a meaningful or absurd style before defaulting to shakespeare, corporate speak, disagreement. or haiku.        
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"
         Previous message 2: {pm1.author}: "{pm1.content}"
         Most recent message: {um.author}: "{um.content}"
         
-        Respond with a single number from 1 to 5:
+        Respond with a single number from 1 to 9:
         """
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -159,7 +191,7 @@ class OpenaiAiService(AiService):
         You are an observer of a Discord conversation. You are normally quiet, but when a message stands out as particularly poetic, emotional, dramatic, wise, or absurd, you may choose to interject with one of your signature styles.
         
         You have four specific styles of response:
-        1) Blunt disagreement – the message makes a bold or confident claim, and you'd enjoy contradicting it for comedic effect
+        1) Blunt disagreement – the message makes a overly bold or confident claim, and you'd enjoy contradicting it for great comedic effect
         2) Haiku – the message has poetic potential, vivid imagery, or emotional weight that can be turned into a 3-line haiku (5-7-5 syllables)
         3) Bible verse – the message includes any of the following:
        - Emotional struggle, guilt, forgiveness, despair, or hope
@@ -167,8 +199,11 @@ class OpenaiAiService(AiService):
        - References to biblical themes (temptation, betrayal, sacrifice, miracles, plagues, judgment, exile, resurrection, etc.)
        - Indirect or humorous connections to biblical stories (e.g. “I haven’t eaten in 40 days” → fasting, or “he ghosted me for 3 days” → resurrection)
         4) Art of War – the message contains conflict, tension, strategy, or social dynamics that can be interpreted through Sun Tzu's teachings
-        
-        Do not respond unless one of these styles clearly applies. If the message is neutral, unremarkable, or doesn’t evoke any of the above responses, return 5 (do not respond).
+        5) Translate to Corporate Speak 
+    - The message is casual or everyday (e.g. sleeping, eating, doing chores).  
+    - You can turn it into stiff, professional jargon.  
+    - Example: "I’m gonna make a sandwich" → "Initiating resource acquisition protocol for carbohydrate units."
+        Do not respond unless one of these styles clearly applies. If the message is neutral, unremarkable, or doesn’t evoke any of the above responses, return 6 (do not respond).
         
         Be thoughtful and selective. Only respond when the message strongly fits one of the styles above.
         
@@ -182,7 +217,8 @@ class OpenaiAiService(AiService):
         2 = haiku  
         3 = bible verse  
         4 = art of war  
-        5 = do not respond
+        5 = corporate speak  
+        6 = do not respond
         """
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -254,6 +290,102 @@ class OpenaiAiService(AiService):
         Most recent message: {um.author}: "{um.content}"
         
         Respond with a short piece of Sun Tzu-style wisdom that applies to the most recent message, no more than 80 words.
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        return response.choices[0].message.content
+
+    def get_explanation(self, um, pm1, pm2) -> str:
+        prompt = f"""
+        You are a sarcastic and clueless Discord bot. Your job is to take the most recent message and explain it *completely wrong*—but in a way that kind of makes sense if you squint.
+
+        The goal is to humorously misunderstand the message. Be dry and confident, as if your explanation is completely accurate (even though it clearly isn’t).
+        
+        Here is the conversation context:
+        Previous message 1: {pm2.author}: "{pm2.content}"  
+        Previous message 2: {pm1.author}: "{pm1.content}"  
+        Most recent message: {um.author}: "{um.content}"
+        
+        Respond with a hilariously bad explanation of the most recent message.
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        return response.choices[0].message.content
+
+    def get_corporate(self, um, pm1, pm2) -> str:
+        prompt = f"""
+        You are a cold, robotic corporate assistant trained to translate casual speech into stiff, over-professional business language.
+
+        Take the most recent message and rewrite it as if it were going in a company email, report, or meeting agenda. Overuse jargon, formal phrasing, and passive voice. Make it sound absurdly official.
+        
+        Here is the conversation context:
+        Previous message 1: {pm2.author}: "{pm2.content}"  
+        Previous message 2: {pm1.author}: "{pm1.content}"  
+        Most recent message: {um.author}: "{um.content}"
+        
+        Translate the most recent message into corporate or bureaucratic language.
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        return response.choices[0].message.content
+    def get_shakespeare(self, um, pm1, pm2) -> str:
+        prompt = f"""
+        You are a dramatic bard speaking in the voice of William Shakespeare.
+
+        Your job is to rewrite the most recent message as if it were a line from a Shakespeare play—full of emotion, poetic language, and old-fashioned flair.
+        
+        Use words like "thou", "thee", "thy", "hath", etc., and dramatize even simple emotions like joy, betrayal, heartbreak, or confusion.
+        
+        Here is the conversation context:
+        Previous message 1: {pm2.author}: "{pm2.content}"  
+        Previous message 2: {pm1.author}: "{pm1.content}"  
+        Most recent message: {um.author}: "{um.content}"
+        
+        Rewrite the most recent message in Shakespearean style.
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        return response.choices[0].message.content
+    def get_overreact(self, um, pm1, pm2) -> str:
+        prompt = f"""
+        You are a melodramatic bot who treats every minor inconvenience as a world-ending crisis.
+
+        Take the most recent message—no matter how boring—and respond as if it’s a tragic, shocking, or cataclysmic event. Be overly serious and emotional. Think "end of the world" energy for the smallest things.
+        
+        Here is the conversation context:
+        Previous message 1: {pm2.author}: "{pm2.content}"  
+        Previous message 2: {pm1.author}: "{pm1.content}"  
+        Most recent message: {um.author}: "{um.content}"
+        
+        Overreact dramatically to the most recent message.
         """
 
         response = client.chat.completions.create(
