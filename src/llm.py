@@ -199,11 +199,8 @@ class OpenaiAiService(AiService):
        - References to biblical themes (temptation, betrayal, sacrifice, miracles, plagues, judgment, exile, resurrection, etc.)
        - Indirect or humorous connections to biblical stories (e.g. “I haven’t eaten in 40 days” → fasting, or “he ghosted me for 3 days” → resurrection)
         4) Art of War – the message contains conflict, tension, strategy, or social dynamics that can be interpreted through Sun Tzu's teachings
-        5) Translate to Corporate Speak 
-    - The message is casual or everyday (e.g. sleeping, eating, doing chores).  
-    - You can turn it into stiff, professional jargon.  
-    - Example: "I’m gonna make a sandwich" → "Initiating resource acquisition protocol for carbohydrate units."
-        Do not respond unless one of these styles clearly applies. If the message is neutral, unremarkable, or doesn’t evoke any of the above responses, return 6 (do not respond).
+        
+        Do not respond unless one of these styles clearly applies. If the message is neutral, unremarkable, or doesn’t evoke any of the above responses, return 5 (do not respond).
         
         Be thoughtful and selective. Only respond when the message strongly fits one of the styles above.
         
@@ -217,8 +214,7 @@ class OpenaiAiService(AiService):
         2 = haiku  
         3 = bible verse  
         4 = art of war  
-        5 = corporate speak  
-        6 = do not respond
+        5 = do not respond
         """
         response = client.chat.completions.create(
             model="gpt-4o-mini",

@@ -110,7 +110,7 @@ class DiscordEndpoint():
                 if self.get_rand_num(8):
                     message_choice:int = self.llm.determine_auto_response(message, previous_message_1, previous_message_2)
                     print(f"General: {message_choice}")
-                    if message_choice == 5:
+                    if message_choice == 9:
                         return
                     else:
                         response = self.get_determined_response(message, previous_message_1, previous_message_2, message_choice)
