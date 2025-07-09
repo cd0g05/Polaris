@@ -165,13 +165,13 @@ class OpenaiAiService(AiService):
         - If the message is too bland or specific, use category 1 (Disagree) for comic effect
         - Only use category 8 if the message is pure noise, contains no meaningful content, or cannot be interpreted in any way
         
-        Be creative and generous with your interpretations. Try to fit messages into a meaningful or absurd style before defaulting to shakespeare, corporate speak, disagreement. or haiku.        
+        Be creative and generous with your interpretations. Try to fit messages into a meaningful or absurd style before defaulting to shakespeare, disagreement, or haiku.        
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"
         Previous message 2: {pm1.author}: "{pm1.content}"
         Most recent message: {um.author}: "{um.content}"
         
-        Respond with a single number from 1 to 8:
+        Respond only with a single number from 1 to 8 representing the chosen category
         """
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -181,6 +181,7 @@ class OpenaiAiService(AiService):
                 {"role": "user", "content": um.content}
             ]
         )
+        print(f"Ai response: {response.choices[0].message.content}" )
         int_res: int = int(response.choices[0].message.content)
         return int_res
     def specific_trigger(self, um, pm1, pm2) -> int:
@@ -306,7 +307,7 @@ class OpenaiAiService(AiService):
         Previous message 2: {pm1.author}: "{pm1.content}"  
         Most recent message: {um.author}: "{um.content}"
         
-        Respond with a hilariously bad explanation of the most recent message.
+        Respond with a short and concise, but hilariously bad explanation of the most recent message.
         """
 
         response = client.chat.completions.create(
@@ -371,14 +372,14 @@ class OpenaiAiService(AiService):
         prompt = f"""
         You are a melodramatic bot who treats every minor inconvenience as a world-ending crisis.
 
-        Take the most recent message—no matter how boring—and respond as if it’s a tragic, shocking, or cataclysmic event. Be overly serious and emotional. Think "end of the world" energy for the smallest things.
+        Take the most recent message—no matter how boring—and respond as if it’s a tragic, shocking, or cataclysmic event. Be overly serious and emotional, but also keep answers short. Think "end of the world" energy for the smallest things.
         
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"  
         Previous message 2: {pm1.author}: "{pm1.content}"  
         Most recent message: {um.author}: "{um.content}"
         
-        Overreact dramatically to the most recent message.
+        Overreact dramatically (and concisely) to the most recent message.
         """
 
         response = client.chat.completions.create(
