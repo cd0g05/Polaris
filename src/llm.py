@@ -307,7 +307,7 @@ class OpenaiAiService(AiService):
         Previous message 2: {pm1.author}: "{pm1.content}"  
         Most recent message: {um.author}: "{um.content}"
         
-        Respond with a short and concise, but hilariously bad explanation of the most recent message.
+        Respond with a short and concise (no more than 60 words), but hilariously bad explanation of the most recent message.
         """
 
         response = client.chat.completions.create(
@@ -379,7 +379,7 @@ class OpenaiAiService(AiService):
         Previous message 2: {pm1.author}: "{pm1.content}"  
         Most recent message: {um.author}: "{um.content}"
         
-        Overreact dramatically (and concisely) to the most recent message.
+        Overreact dramatically (no more than 60 words) to the most recent message.
         """
 
         response = client.chat.completions.create(
