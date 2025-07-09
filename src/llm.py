@@ -144,29 +144,26 @@ class OpenaiAiService(AiService):
        - References to biblical themes (temptation, betrayal, sacrifice, miracles, plagues, judgment, exile, resurrection, etc.)
        - Indirect or humorous connections to biblical stories (e.g. “I haven’t eaten in 40 days” → fasting, or “he ghosted me for 3 days” → resurrection)
         4) Art of War – analyze the situation with advice or insight inspired by Sun Tzu's *The Art of War*
-        5) Translate to Corporate Speak 
-    - The message is casual or everyday (e.g. sleeping, eating, doing chores).  
-    - You can turn it into stiff, professional jargon.  
-    - Example: "I’m gonna make a sandwich" → "Initiating resource acquisition protocol for carbohydrate units."
-        6)  Poorly Explain the Message  
+    
+        5)  Poorly Explain the Message  
     - The message involves something technical, serious, or niche.  
     - You can humorously misunderstand or oversimplify it.  
     - Example: "I’m configuring a local server" → "So you’re yelling at your toaster until it obeys?"
-        7) 3) **Make it Shakespearean**  
+        6) 3) **Make it Shakespearean**  
     - The message has emotion (love, betrayal, conflict, drama).  
     - You can rewrite it like a line from a Shakespeare play.  
     - Example: "She blocked me again" → "Thy visage banished from her scroll once more—truly, mine heart is undone."
-        8) 4) **Overreact Dramatically**  
+        7) 4) **Overreact Dramatically**  
     - The message is extremely mundane, but can be exaggerated for comic effect.  
     - Example: "We’re out of dish soap" → "We live in an age of despair."
-        9) No fit – use only when the message cannot be reasonably interpreted (e.g. "lol", image, link, or one-word reply)
+        8) No fit – use only when the message cannot be reasonably interpreted (e.g. "lol", image, link, or one-word reply)
         
         When choosing a response, prioritize as follows:
         - If the message reflects emotional tension, struggle, conflict, ethics, or decision-making: prefer category 3 (Bible) or 4 (Art of War)
-        - If the situation seems fitting for proper comedic affect, use category 6 or 8
-        - If those do not make sense, see if you can twist it into a haiku, shakespeare, or corporate speak
+        - If the situation seems fitting for proper comedic affect, use category 5 or 7
+        - If those do not make sense, see if you can twist it into a haiku or shakespeare
         - If the message is too bland or specific, use category 1 (Disagree) for comic effect
-        - Only use category 9 if the message is pure noise, contains no meaningful content, or cannot be interpreted in any way
+        - Only use category 8 if the message is pure noise, contains no meaningful content, or cannot be interpreted in any way
         
         Be creative and generous with your interpretations. Try to fit messages into a meaningful or absurd style before defaulting to shakespeare, corporate speak, disagreement. or haiku.        
         Here is the conversation context:
@@ -174,7 +171,7 @@ class OpenaiAiService(AiService):
         Previous message 2: {pm1.author}: "{pm1.content}"
         Most recent message: {um.author}: "{um.content}"
         
-        Respond with a single number from 1 to 9:
+        Respond with a single number from 1 to 8:
         """
         response = client.chat.completions.create(
             model="gpt-4o-mini",

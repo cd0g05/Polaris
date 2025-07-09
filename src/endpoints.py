@@ -51,13 +51,7 @@ class DiscordEndpoint():
         elif num == 5:
             res = self.llm.get_explanation(um, pm1, pm2)
             return res
-        elif num == 6:
-            res = self.llm.get_corporate(um, pm1, pm2)
-            return res
         elif num == 7:
-            res = self.llm.get_shakespeare(um, pm1, pm2)
-            return res
-        elif num == 8:
             res = self.llm.get_overreact(um, pm1, pm2)
             return res
 
@@ -110,7 +104,7 @@ class DiscordEndpoint():
                 if self.get_rand_num(1):
                     message_choice:int = self.llm.determine_auto_response(message, previous_message_1, previous_message_2)
                     print(f"General: {message_choice}")
-                    if message_choice == 9:
+                    if message_choice == 8:
                         return
                     else:
                         response = self.get_determined_response(message, previous_message_1, previous_message_2, message_choice)
