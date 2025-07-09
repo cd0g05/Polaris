@@ -51,6 +51,9 @@ class DiscordEndpoint():
         elif num == 5:
             res = self.llm.get_explanation(um, pm1, pm2)
             return res
+        elif num == 6:
+            res = self.llm.get_shakespeare(um, pm1, pm2)
+            return res
         elif num == 7:
             res = self.llm.get_overreact(um, pm1, pm2)
             return res
