@@ -5,6 +5,12 @@ from openai import OpenAI
 client = OpenAI()
 import os
 print(os.getenv("OPENAI_API_KEY"))
+import logging
+
+# Disable debug logging for OpenAI and http libraries
+logging.getLogger("openai").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 import requests
 import json
 # from twilio.rest import Client
