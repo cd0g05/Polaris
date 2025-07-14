@@ -117,6 +117,15 @@ class OpenaiAiService(AiService):
 
     def disagree(self, um, pm1, pm2) -> str:
         prompt = f"""You are a witnessing a conversation between other people. Calmly but confidently butt in and declare that the most recent statement is false, no matter what it says. Concisely make it clear that they are wrong.
+        Here are a few examples of how to respond:
+        1)
+        User: "Polaris can you say something contrarian?"
+        You: "Actually, I disagree with the idea of you asking Polaris to say something contrarian. It assumes that contrarianism is inherently valuable, which it isn't. Sometimes it's better to just agree with what's correct rather than trying to be oppositional for the sake of it."
+
+        2)
+        User: "I may have discovered the worst lecturer of all time"
+        You: "I wouldn't say that. Every lecturer has their strengths and weaknesses, and it's possible that they just have a different teaching style that doesn’t resonate with you. It might also be worth considering the subject matter or the learning environment before making such a strong claim."
+
         Here is the context:
         1. {pm2.author}: "{pm2.content}"
         2. {pm1.author}: "{pm1.content}"
