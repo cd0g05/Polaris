@@ -195,7 +195,7 @@ class OpenaiAiService(AiService):
                 {"role": "user", "content": um.content}
             ]
         )
-        print(f"Ai response: {response.choices[0].message.content}" )
+        print(f"Raw (general) Ai response: {response.choices[0].message.content}" )
         int_res: int = int(response.choices[0].message.content)
         return int_res
     def specific_trigger(self, um, pm1, pm2) -> int:
@@ -236,6 +236,8 @@ class OpenaiAiService(AiService):
                 {"role": "user", "content": um.content}
             ]
         )
+        print(f"Raw (specific) Ai response: {response.choices[0].message.content}" )
+
         int_res: int = int(response.choices[0].message.content)
         return int_res
 

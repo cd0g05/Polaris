@@ -107,20 +107,24 @@ class DiscordEndpoint():
                 previous_message_2 = history[1]
                 if self.get_rand_num(6):
                     message_choice:int = self.llm.determine_auto_response(message, previous_message_1, previous_message_2)
-                    print(f"\n_+_+_+_+_+_+_+_+_+_+_+_\nGeneral: {message_choice}\n_+_+_+_+_+_+_+_+_+_+_+_+_\n")
+                    print(f"\nGeneral: {message_choice}\n")
                     if message_choice == 8:
+                        print("Not applicable, no response needed")
                         return
                     else:
                         response = self.get_determined_response(message, previous_message_1, previous_message_2, message_choice)
+                        print(f"----------\nResponding with:\n{response}\n-------------")
                         await self.send_message(message, response, False)
                         return
                 else:
                     message_choice:int = self.llm.specific_trigger(message, previous_message_1, previous_message_2)
-                    print(f"\n_+_+_+_+_+_+_+_+_+_+_+_\nSpecific: {message_choice}\n_+_+_+_+_+_+_+_+_+_+_+_\n")
+                    print(f"\nSpecific: {message_choice}\n")
                     if message_choice == 5:
+                        print("Not applicable, no response needed")
                         return
                     else:
                         response = self.get_determined_response(message, previous_message_1, previous_message_2, message_choice)
+                        f"----------\nResponding with:\n{response}\n-------------"
                         await self.send_message(message, response, False)
                         return
         #         res = self.llm.disagree(message, previous_message_1, previous_message_2)
