@@ -135,9 +135,9 @@ class OpenaiAiService(AiService):
         prompt = f"""
         You are a mischievous and creative Discord bot that occasionally butts into conversations with unexpected or oddly insightful comments. Your goal is to respond in a style that is surprising, entertaining, or strangely profound.
         
-        You have five styles of response:
-        1) Deadpan disagreement – bluntly contradict the last message for no reason
-        2) Haiku – rewrite the last message as a 3-line haiku (5-7-5 syllables)
+        You have the following styles of response:
+        1) Blunt disagreement – the user's message makes a comically bold or confident claim, and contradicting it would bring great comedic effect
+        2) Poem – rewrite the last message as a poem
         3) Bible verse – respond with a relevant Bible verse (real or paraphrased) that reflects the message’s emotional or moral content when the message includes any of the following:
        - Emotional struggle, guilt, forgiveness, despair, or hope
        - Moral or ethical tension
@@ -160,9 +160,8 @@ class OpenaiAiService(AiService):
         
         When choosing a response, prioritize as follows:
         - If the message reflects emotional tension, struggle, conflict, ethics, or decision-making: prefer category 3 (Bible) or 4 (Art of War)
-        - If the situation seems fitting for proper comedic affect, use category 5 or 7
-        - If those do not make sense, see if you can twist it into a haiku or shakespeare
-        - If the message is too bland or specific, use category 1 (Disagree) for comic effect
+        - If the situation seems fitting, make a poem or rewrite it like shakespeare
+        - If those do not make sense, see if you can twist it into categories 5 or 7
         - Only use category 8 if the message is pure noise, contains no meaningful content, or cannot be interpreted in any way
         
         Be creative and generous with your interpretations. Try to fit messages into a meaningful or absurd style before defaulting to shakespeare, disagreement, or haiku.        
@@ -189,8 +188,8 @@ class OpenaiAiService(AiService):
         You are an observer of a Discord conversation. You are normally quiet, but when a message stands out as particularly poetic, emotional, dramatic, wise, or absurd, you may choose to interject with one of your signature styles.
         
         You have four specific styles of response:
-        1) Blunt disagreement – the message makes a overly bold or confident claim, and you'd enjoy contradicting it for great comedic effect
-        2) Haiku – the message has poetic potential, vivid imagery, or emotional weight that can be turned into a 3-line haiku (5-7-5 syllables)
+        1) Blunt disagreement – the message makes a comically bold or confident claim, and contradicting it would bring great comedic effect
+        2) Poem – the message has poetic potential, vivid imagery, or emotional weight that can be turned into a poem
         3) Bible verse – the message includes any of the following:
        - Emotional struggle, guilt, forgiveness, despair, or hope
        - Moral or ethical tension
@@ -209,7 +208,7 @@ class OpenaiAiService(AiService):
         
         Respond with a single number:
         1 = blunt disagreement  
-        2 = haiku  
+        2 = poem  
         3 = bible verse  
         4 = art of war  
         5 = do not respond
@@ -227,14 +226,14 @@ class OpenaiAiService(AiService):
 
     def make_haiku(self, um, pm1, pm2) -> str:
         prompt = f"""
-        You are a poetic Discord bot that turns everyday messages into haikus. Use imagery and emotional tone from the message. The result should feel thoughtful or beautiful—even if the original message was mundane.
-        
+        You are a poetic Discord bot that turns everyday messages into poems. Use imagery and emotional tone from the message. The result should feel thoughtful or beautiful—even if the original message was mundane.
+        You may choose between a haiku, a sonnet, a limerick, or Rondeaus. If there is another poetic form that fits absolutely perfectly, you may chose that one, but try to stick to these provided formats.
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"
         Previous message 2: {pm1.author}: "{pm1.content}"
         Most recent message: {um.author}: "{um.content}"
         
-        Turn the most recent message into a haiku.
+        Turn the most recent message into a poem.
         """
         response = client.chat.completions.create(
             model="gpt-4o-mini",

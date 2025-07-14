@@ -40,6 +40,7 @@ class DiscordEndpoint():
             res = self.llm.disagree(um, pm1, pm2)
             return res
         elif num == 2:
+
             res = self.llm.make_haiku(um, pm1, pm2)
             return res
         elif num == 3:
