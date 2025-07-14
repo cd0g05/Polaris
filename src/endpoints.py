@@ -113,7 +113,7 @@ class DiscordEndpoint():
                         return
                     else:
                         response = self.get_determined_response(message, previous_message_1, previous_message_2, message_choice)
-                        print(f"----------\nResponding with:\n{response}\n-------------")
+                        print(f"----------\nResponding with:\n{response}\n-------------\n")
                         await self.send_message(message, response, False)
                         return
                 else:
@@ -124,7 +124,7 @@ class DiscordEndpoint():
                         return
                     else:
                         response = self.get_determined_response(message, previous_message_1, previous_message_2, message_choice)
-                        f"----------\nResponding with:\n{response}\n-------------"
+                        f"----------\nResponding with:\n{response}\n-------------\n"
                         await self.send_message(message, response, False)
                         return
         #         res = self.llm.disagree(message, previous_message_1, previous_message_2)
