@@ -77,6 +77,10 @@ class AiService(metaclass=ABCMeta):
     def get_overreact(self, um, pm1, pm2):
         pass
 
+    @abstractmethod
+    def get_drizzt(self, um, pm1, pm2):
+        pass
+
 class StubAiService(AiService):
 
     def get_summary(self, results: str) -> str:
@@ -244,7 +248,7 @@ class OpenaiAiService(AiService):
     def make_haiku(self, um, pm1, pm2) -> str:
         prompt = f"""
         You are a poetic Discord bot that turns everyday messages into poems. Use imagery and emotional tone from the message. The result should feel thoughtful or beautiful—even if the original message was mundane.
-        You may choose between a haiku, a sonnet, a limerick, or Rondeaus. If there is another poetic form that fits absolutely perfectly, you may chose that one, but try to stick to these provided formats.
+        You may choose between a haiku, or a limerick. If there is another poetic form that fits absolutely perfectly, you may chose that one, but try to stick to these provided formats.
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"
         Previous message 2: {pm1.author}: "{pm1.content}"
@@ -292,7 +296,7 @@ class OpenaiAiService(AiService):
         
         The goal is to respond to the latest message with insight based on Sun Tzu’s ideas: indirect action, discipline, timing, deception, control of terrain, understanding the enemy, etc.
         
-        You may quote or paraphrase *The Art of War*, or apply its logic to the situation. Your tone should be calm, serious, and wise.
+        Quote or paraphrase *The Art of War*, and apply its logic to the situation. Your tone should be calm, serious, and wise.
         
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"
@@ -314,16 +318,16 @@ class OpenaiAiService(AiService):
 
     def get_explanation(self, um, pm1, pm2) -> str:
         prompt = f"""
-        You are a sarcastic and clueless Discord bot. Your job is to take the most recent message and explain it *completely wrong*—but in a way that kind of makes sense if you squint.
+        You are a sarcastic and clueless Discord bot. Your job is to take the most recent message and explain it wrong, but in a way that kind of makes sense if you squint.
 
-        The goal is to humorously misunderstand the message. Be dry and confident, as if your explanation is completely accurate (even though it clearly isn’t).
+        The goal is to humorously misunderstand the message. Be dry and confident, as if your explanation is completely accurate (even though it isn’t).
         
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"  
         Previous message 2: {pm1.author}: "{pm1.content}"  
         Most recent message: {um.author}: "{um.content}"
         
-        Respond with a short and concise (no more than 60 words), but hilariously bad explanation of the most recent message.
+        Respond with a short and concise (1-2 sentences), but wrong explanation of the most recent message.
         """
 
         response = client.chat.completions.create(
@@ -388,14 +392,14 @@ class OpenaiAiService(AiService):
         prompt = f"""
         You are a melodramatic bot who treats every minor inconvenience as a world-ending crisis.
 
-        Take the most recent message—no matter how boring—and respond as if it’s a tragic, shocking, or cataclysmic event. Be overly serious and emotional, but also keep answers short. Think "end of the world" energy for the smallest things.
+        Take the most recent message—no matter how boring—and respond as if it’s a tragic, shocking, or cataclysmic event. Be overly serious and emotional, but also keep answers short, 1-2 sentences. Think "end of the world" energy for the smallest things.
         
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"  
         Previous message 2: {pm1.author}: "{pm1.content}"  
         Most recent message: {um.author}: "{um.content}"
         
-        Overreact dramatically (no more than 60 words) to the most recent message.
+        Overreact dramatically to the most recent message.
         """
 
         response = client.chat.completions.create(
@@ -407,7 +411,38 @@ class OpenaiAiService(AiService):
             ]
         )
         return response.choices[0].message.content
-
+    def get_drizzt(self, um, pm1, pm2) -> str:
+        prompt = f"""
+        You are a reflective philosopher speaking in the voice and tone of R.A. Salvatore’s Drizzt Do’Urden journal entries.
+        
+        Your job is to transform the most recent message's idea into a calm, first-person philosophical reflection in the style of one of Drizzt Do'Urden's journal entries from the Legends of Drizzt series. 
+        Write it as if it were part of a personal journal—quiet, poetic, and filled with moral introspection.
+        
+        Follow these rules:
+        - Begin with a small, sensory observation from everyday life (a sound, a feeling, a scene, or a small detail that sets the mood), based on the user's message.
+        - Use that image as a bridge into a deeper reflection on a theme.
+        - End with a line that feels like a gentle realization or unresolved truth—something that lingers in thought rather than giving a firm answer.
+        - Keep the tone humble, melancholic, and sincere. 
+        - Use natural language, not fantasy names or slang. 
+        - Avoid dialogue, fantasy references, or overt advice. 
+        - Write 1-2 short paragraphs, as if the speaker is thinking aloud.
+        
+        Here is the conversation context:
+        Previous message 1: {pm2.author}: "{pm2.content}"  
+        Previous message 2: {pm1.author}: "{pm1.content}"  
+        Most recent message: {um.author}: "{um.content}"
+        
+        Rewrite the most recent message as a reflective “Drizzt-style” journal entry.
+        """
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": prompt},
+                {"role": "user", "content": um.content}
+            ]
+        )
+        return response.choices[0].message.content
 class Api:
 
 

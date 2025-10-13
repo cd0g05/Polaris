@@ -243,7 +243,16 @@ class DiscordEndpoint():
                                 "\nIf you would like the response via a private message, include a '?' in the command - i.e: $?stock AMD "
                                 "\nIf you have any further questions, contact Carter Cripe at *(970) 581-8720*.")
                 await self.send_message(message, response, is_private)
-
+            elif command == 'drizzt':
+                inpt:str = " ".join(toks[1:])
+                history = [msg async for msg in message.channel.history(limit=3, before=message)]
+                if len(history) >= 2:
+                    previous_message_1 = history[0]
+                    previous_message_2 = history[1]
+                    response:str = self.llm.get_drizzt(inpt, previous_message_1, previous_message_2)
+                else:
+                    response:str = self.llm.get_drizzt(inpt, "", "")
+                await self.send_message(message, response, is_private)
             else:
                 await self.send_message(message, 'Invalid Command', is_private)
 
