@@ -430,7 +430,7 @@ class OpenaiAiService(AiService):
         Here is the conversation context:
         Previous message 1: {pm2.author}: "{pm2.content}"  
         Previous message 2: {pm1.author}: "{pm1.content}"  
-        Most recent message: {um.author}: "{um.content}"
+        Most recent message: User: "{um}"
         
         Rewrite the most recent message as a reflective “Drizzt-style” journal entry.
         """
