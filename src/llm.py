@@ -439,7 +439,7 @@ class OpenaiAiService(AiService):
             messages=[
                 {"role": "system",
                  "content": prompt},
-                {"role": "user", "content": um.content}
+                {"role": "user", "content": um}
             ]
         )
         return response.choices[0].message.content
